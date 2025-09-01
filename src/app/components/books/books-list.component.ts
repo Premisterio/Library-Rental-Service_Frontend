@@ -1,4 +1,4 @@
-import { Component, OnInit, computed } from '@angular/core';
+import { Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -50,17 +50,17 @@ import { Book } from '../../models/book.interface';
 
     <div class="search-filters">
       <mat-form-field appearance="outline" class="search-field">
-        <mat-label>Пошук книг</mat-label>
+        <mat-label>Знайти книгу</mat-label>
         <input matInput 
-               [(ngModel)]="searchQuery" 
-               (input)="onSearchChange()"
+               [ngModel]="searchQuery()"
+               (ngModelChange)="searchQuery.set($event); onSearchChange()"
                placeholder="Назва, автор...">
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="filter-field">
         <mat-label>Жанр</mat-label>
-        <mat-select [(value)]="selectedGenre" (selectionChange)="onFilterChange()">
+        <mat-select [value]="selectedGenre()" (selectionChange)="selectedGenre.set($event.value); onFilterChange()">
           <mat-option value="">Всі жанри</mat-option>
           @for (genre of availableGenres(); track genre) {
             <mat-option [value]="genre">{{ genre }}</mat-option>
@@ -70,8 +70,8 @@ import { Book } from '../../models/book.interface';
 
       <mat-form-field appearance="outline" class="filter-field">
         <mat-label>Статус</mat-label>
-        <mat-select [(value)]="availabilityFilter" (selectionChange)="onFilterChange()">
-          <mat-option value="">Всі книги</mat-option>
+        <mat-select [value]="availabilityFilter()" (selectionChange)="availabilityFilter.set($event.value); onFilterChange()">
+          <mat-option value="">Всі</mat-option>
           <mat-option value="true">Доступні</mat-option>
           <mat-option value="false">Недоступні</mat-option>
         </mat-select>
@@ -142,9 +142,9 @@ import { Book } from '../../models/book.interface';
   styleUrls: ['./books-list.component.scss']
 })
 export class BooksListComponent implements OnInit {
-  searchQuery = '';
-  selectedGenre = '';
-  availabilityFilter = '';
+  searchQuery = signal('');
+  selectedGenre = signal('');
+  availabilityFilter = signal('');
   
   private searchTimeout: any;
 
@@ -159,28 +159,28 @@ export class BooksListComponent implements OnInit {
   }
 
   availableGenres = computed(() => {
-    const books = this.bookService.books();
-    const genres = books.map(book => book.genre);
+    const allBooks = this.bookService.books();
+    const genres = allBooks.map(book => book.genre);
     return [...new Set(genres)].sort();
   });
 
   filteredBooks = computed(() => {
     let books = this.bookService.books();
     
-    if (this.searchQuery.trim()) {
-      const query = this.searchQuery.toLowerCase().trim();
+    if (this.searchQuery().trim()) {
+      const query = this.searchQuery().toLowerCase().trim();
       books = books.filter(book => 
         book.title.toLowerCase().includes(query) ||
         book.author.toLowerCase().includes(query)
       );
     }
     
-    if (this.selectedGenre) {
-      books = books.filter(book => book.genre === this.selectedGenre);
+    if (this.selectedGenre()) {
+      books = books.filter(book => book.genre === this.selectedGenre());
     }
     
-    if (this.availabilityFilter !== '') {
-      const isAvailable = this.availabilityFilter === 'true';
+    if (this.availabilityFilter() !== '') {
+      const isAvailable = this.availabilityFilter() === 'true';
       books = books.filter(book => 
         isAvailable ? book.availableCopies > 0 : book.availableCopies === 0
       );
@@ -212,14 +212,12 @@ export class BooksListComponent implements OnInit {
   }
 
   onFilterChange(): void {
-    this.applyFilters();
+    // Client-side filtering handled by computed property
   }
 
   private applyFilters(): void {
     const params = {
-      ...(this.searchQuery.trim() && { search: this.searchQuery.trim() }),
-      ...(this.selectedGenre && { genre: this.selectedGenre }),
-      ...(this.availabilityFilter !== '' && { available: this.availabilityFilter === 'true' })
+      ...(this.searchQuery().trim() && { search: this.searchQuery().trim() })
     };
 
     this.bookService.getAllBooks(params).subscribe({

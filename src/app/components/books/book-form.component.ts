@@ -8,7 +8,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { BookService } from '../../services/book.service';
 import { AuthService } from '../../services/auth.service';
@@ -25,15 +24,16 @@ import { Book, CreateBookRequest, UpdateBookRequest } from '../../models/book.in
     MatFormFieldModule,
     MatSnackBarModule,
     MatIconModule,
-    MatToolbarModule
   ],
   template: `
-    <mat-toolbar>
-      <button mat-icon-button (click)="goBack()" aria-label="Повернутися до каталогу книг">
-        <mat-icon>arrow_back</mat-icon>
-      </button>
-      <span>{{ isEditMode ? 'Редагування книги' : 'Додавання нової книги' }}</span>
-    </mat-toolbar>
+    <div class="books-header">
+      <div class="header-left">
+        <button mat-icon-button (click)="goBack()" class="back-button" aria-label="Повернутися до каталогу книг">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1>{{ isEditMode ? 'Редагування книги' : 'Додавання нової книги' }}</h1>
+      </div>
+    </div>
 
     <div class="form-container">
       <mat-card>
@@ -293,6 +293,6 @@ export class BookFormComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/books']);
+    window.history.back();
   }
 }
