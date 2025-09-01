@@ -6,6 +6,7 @@
   font-size: 2.5rem;
   font-weight: 700;
   margin: 0.5rem 0;
+  text-align: center;
 }
 
 .subtitle {
@@ -35,7 +36,6 @@
   border-color: #f44336;
 }
 
-
 .dashboard-content {
   padding: 1.4rem;
   max-width: 50rem;
@@ -50,6 +50,74 @@
 
       strong {
         color: #1e4dba;
+      }
+    }
+  }
+
+  .statistics-section {
+    margin-bottom: 2rem;
+    
+    h3 {
+      margin: 0 0 1rem 0;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #333;
+    }
+    
+    .loading-stats {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding: 2rem;
+      
+      p {
+        margin: 0;
+        color: #666;
+      }
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      
+      .stat-card {
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 1.5rem;
+        transition: box-shadow 0.3s ease;
+        
+        &:hover {
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-info {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 1rem;
+          
+          .stat-label,
+          p.stat-label {
+            margin: 0;
+            font-size: 0.95rem;
+            color: #666;
+            flex: 1;
+            line-height: 1.4;
+          }
+          
+          .stat-number,
+          p.stat-number {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e4dba;
+            white-space: nowrap;
+            line-height: 1.4;
+          }
+        }
       }
     }
   }
@@ -94,10 +162,29 @@
   }
 }
 
-
 @media (max-width: 768px) {
   .dashboard-content {
     padding: 1rem;
+    
+    .statistics-section .stats-grid {
+      grid-template-columns: 1fr;
+      
+      .stat-card .stat-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        
+        .stat-label,
+        p.stat-label {
+          font-size: 0.9rem;
+        }
+        
+        .stat-number,
+        p.stat-number {
+          font-size: 1.3rem;
+        }
+      }
+    }
     
     .quick-actions .action-buttons .action-button {
       padding: 0.8rem 1rem;
@@ -113,7 +200,7 @@
 }
 
 @media (max-width: 600px) {
-    span:first-child {
-      display: none;
-    }
+  span:first-child {
+    display: none;
+  }
 }

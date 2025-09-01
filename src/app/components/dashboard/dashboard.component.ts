@@ -63,34 +63,31 @@ import { RentalStatsResponse } from '../../models/rental.interface';
                 } @else {
                   <div class="stats-grid">
                     <div class="stat-card">
-                      <mat-icon color="primary">library_books</mat-icon>
                       <div class="stat-info">
-                        <span class="stat-number">{{ stats()?.data?.totalRentals || 0 }}</span>
-                        <span class="stat-label">Всього орендів</span>
+                        <p class="stat-label">Всього орендовано книг:</p>
+                        <p class="stat-number">{{ stats()?.data?.totalRentals || 0 }}</p>
                       </div>
                     </div>
                     
                     <div class="stat-card">
-                      <mat-icon color="accent">assignment</mat-icon>
                       <div class="stat-info">
-                        <span class="stat-number">{{ stats()?.data?.activeRentals || 0 }}</span>
-                        <span class="stat-label">Активних орендів</span>
+                        <p class="stat-label">Кількість активно орендованих книг:</p>
+                        <p class="stat-number">{{ stats()?.data?.activeRentals || 0 }}</p>
                       </div>
                     </div>
                     
                     <div class="stat-card">
-                      <mat-icon color="warn">schedule</mat-icon>
                       <div class="stat-info">
-                        <span class="stat-number">{{ stats()?.data?.overdueRentals || 0 }}</span>
-                        <span class="stat-label">Прострочених</span>
+                        <p class="stat-label">Кількість прострочених книг:</p>
+                        <p class="stat-number">{{ stats()?.data?.overdueRentals || 0 }}</p>
                       </div>
                     </div>
                     
                     <div class="stat-card">
-                      <mat-icon style="color: green;">attach_money</mat-icon>
                       <div class="stat-info">
-                        <span class="stat-number">{{ stats()?.data?.totalRevenue || 0 }} грн</span>
-                        <span class="stat-label">Загальний дохід</span>
+                        <p class="stat-label">Загальний дохід:</p>
+                        <p class="stat-number">{{ stats()?.data?.totalRevenue || 0 }} грн</p>
+                        
                       </div>
                     </div>
                   </div>
