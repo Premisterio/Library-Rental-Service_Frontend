@@ -81,6 +81,7 @@
 
 // TODO: Update media query
 @media (max-width: 768px) {
+
   .quick-actions .action-buttons {
     flex-direction: column;
     
@@ -88,4 +89,10 @@
       width: 100%;
     }
   }
+}
+
+@media (max-width: 600px) {
+    span:first-child {
+      display: none;
+    }
 }

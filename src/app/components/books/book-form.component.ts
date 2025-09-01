@@ -29,7 +29,7 @@ import { Book, CreateBookRequest, UpdateBookRequest } from '../../models/book.in
   ],
   template: `
     <mat-toolbar>
-      <button mat-icon-button (click)="goBack()">
+      <button mat-icon-button (click)="goBack()" aria-label="Повернутися до каталогу книг">
         <mat-icon>arrow_back</mat-icon>
       </button>
       <span>{{ isEditMode ? 'Редагування книги' : 'Додавання нової книги' }}</span>

@@ -35,7 +35,7 @@ import { Book } from '../../models/book.interface';
   template: `
     <div class="books-header">
       <div class="header-left">
-        <button mat-icon-button routerLink="/dashboard" class="back-button">
+        <button mat-icon-button routerLink="/dashboard" class="back-button" aria-label="Повернутися до панелі керування">
           <mat-icon>arrow_back</mat-icon>
         </button>
         <h1>Каталог книг</h1>

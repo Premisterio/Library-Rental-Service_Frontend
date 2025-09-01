@@ -31,3 +31,29 @@ html, body {
   margin: 0;
   font-family: "Raleway", "Helvetica Neue", Arial, sans-serif;
 }
+
+// Global background
+body {
+  background-color: #e5e5f7;
+  background-image: radial-gradient(#444cf7 0.03125rem, #e5e5f7 0.03125rem);
+  background-size: 0.625rem 0.625rem;
+  background-attachment: fixed;
+}
+
+// White background for search inputs and form fields
+.search-filters mat-form-field,
+mat-form-field,
+.mat-mdc-form-field {
+  .mat-mdc-text-field-wrapper,
+  .mdc-text-field,
+  .mat-mdc-form-field-infix {
+    background-color: white !important;
+  }
+}
+
+// White background for Material Design input containers
+.mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control,
+.mdc-text-field--filled .mdc-text-field__input,
+.mat-mdc-select-panel {
+  background-color: white !important;
+}
