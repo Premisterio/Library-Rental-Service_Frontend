@@ -49,7 +49,7 @@ import { AuthService } from '../../services/auth.service';
               <div class="action-buttons">
                 <button mat-raised-button routerLink="/books" color="primary" class="action-button">
                   <mat-icon>library_books</mat-icon>
-                  Переглянути книги
+                  Переглянути каталог книг
                 </button>
                 
                 @if (canManageLibrary()) {
@@ -60,12 +60,12 @@ import { AuthService } from '../../services/auth.service';
                   
                   <button mat-raised-button routerLink="/rentals" color="primary" class="action-button">
                     <mat-icon>assignment</mat-icon>
-                    Переглянути оренди
+                    Переглянути орендовані книги
                   </button>
                   
                   <button mat-raised-button routerLink="/rentals/add" class="action-button mat-green-accent">
                     <mat-icon>add_circle</mat-icon>
-                    Нова оренда
+                    Орендувати книгу
                   </button>
 
                   <button mat-raised-button routerLink="/readers" color="accent" class="action-button">
