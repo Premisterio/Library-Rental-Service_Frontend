@@ -1,38 +1,71 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
   imports: [
+    RouterModule,
     MatToolbarModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    MatIconModule
   ],
   template: `
     <mat-toolbar color="primary">
       <span>Система прокату книг</span>
+      
       <span class="spacer"></span>
       @if (authService.currentUser(); as user) {
         <span class="user-welcome">Вітаємо, {{ user.username }}!</span>
       }
-      <button mat-stroked-button class="logout-button" (click)="logout()">Вийти</button>
+      <button mat-stroked-button class="logout-button" (click)="logout()">
+        Вийти
+        <mat-icon>logout</mat-icon>
+      </button>
     </mat-toolbar>
+
+    <div class="navigation">
+      <button mat-raised-button routerLink="/books" color="primary" class="icon-only-button">
+        <mat-icon>list</mat-icon>
+          Каталог книг
+      </button>
+    </div>
 
     <div class="dashboard-content">
       <mat-card>
         <mat-card-header>
           <mat-card-title>Панель керування</mat-card-title>
-          <mat-card-subtitle>В розробці</mat-card-subtitle>
+          <mat-card-subtitle>Швидкі дії</mat-card-subtitle>
         </mat-card-header>
         
         <mat-card-content>
           @if (authService.currentUser(); as user) {
-            <p>Користувач: {{ user.username }}</p>
-            <p>Email: {{ user.email }}</p>
-            <p>Роль: {{ getRoleTranslation(user.role) }}</p>
+            <div class="user-info">
+              <p><strong>Користувач:</strong> {{ user.username }}</p>
+              <p><strong>Email:</strong> {{ user.email }}</p>
+              <p><strong>Роль:</strong> {{ getRoleTranslation(user.role) }}</p>
+            </div>
+            
+            <div class="quick-actions">
+              <h3>Швидкі дії:</h3>
+              <div class="action-buttons">
+                <button mat-raised-button routerLink="/books" color="primary">
+                  <mat-icon>library_books</mat-icon>
+                  Переглянути книги
+                </button>
+                @if (['admin', 'librarian'].includes(user.role)) {
+                  <button mat-raised-button routerLink="/books/add" color="accent">
+                    <mat-icon>add</mat-icon>
+                    Додати книгу
+                  </button>
+                }
+              </div>
+            </div>
           }
         </mat-card-content>
       </mat-card>

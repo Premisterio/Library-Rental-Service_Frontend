@@ -1,0 +1,105 @@
+mat-toolbar {
+  margin-bottom: 24px;
+  
+  mat-icon {
+    margin-right: 8px;
+  }
+}
+
+.form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 16px;
+
+  mat-card {
+    mat-card-header {
+      margin-bottom: 16px;
+      
+      mat-card-title {
+        font-size: 24px;
+        font-weight: 500;
+        margin-bottom: 4px;
+      }
+
+      mat-card-subtitle {
+        font-size: 14px;
+        color: #666;
+      }
+    }
+
+    mat-card-content {
+      form {
+        .form-row {
+          display: flex;
+          gap: 16px;
+          margin-bottom: 16px;
+
+          &.two-columns {
+            mat-form-field {
+              flex: 1;
+            }
+          }
+
+          .full-width {
+            width: 100%;
+          }
+
+          mat-form-field {
+            mat-label {
+              font-weight: 500;
+            }
+
+            input {
+              font-size: 14px;
+            }
+
+            mat-error {
+              font-size: 12px;
+            }
+          }
+        }
+      }
+    }
+
+    mat-card-actions {
+      padding-top: 16px;
+      border-top: 1px solid #e0e0e0;
+      margin-top: 16px;
+
+      button {
+        margin-left: 8px;
+        
+        &:first-child {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .form-container {
+    padding: 0 8px;
+
+    mat-card-content {
+      form {
+        .form-row {
+          &.two-columns {
+            flex-direction: column;
+            gap: 8px;
+          }
+        }
+      }
+    }
+
+    mat-card-actions {
+      flex-direction: column-reverse;
+      gap: 8px;
+
+      button {
+        width: 100%;
+        margin: 0;
+      }
+    }
+  }
+}

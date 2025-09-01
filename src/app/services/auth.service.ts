@@ -1,8 +1,9 @@
 import { Injectable, signal } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, tap, catchError, throwError } from 'rxjs';
+import { Observable, tap, catchError } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { ErrorHandlerService } from './shared/error-handler.service';
 
 export interface LoginRequest {
   email: string;
@@ -44,7 +45,8 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private errorHandler: ErrorHandlerService
   ) {
     this.loadUserFromStorage();
   }
@@ -53,7 +55,7 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, credentials)
       .pipe(
         tap(response => this.handleAuthSuccess(response)),
-        catchError(this.handleError)
+        catchError(this.errorHandler.handleError('auth'))
       );
   }
 
@@ -61,7 +63,7 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, userData)
       .pipe(
         tap(response => this.handleAuthSuccess(response)),
-        catchError(this.handleError)
+        catchError(this.errorHandler.handleError('auth'))
       );
   }
 
@@ -106,37 +108,4 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  // Logging errors onto the UI in Ukrainian
-  private handleError = (error: HttpErrorResponse): Observable<never> => {
-    let errorMessage = 'Сталася невідома помилка';
-    
-    if (error.error && error.error.message) {
-      errorMessage = error.error.message;
-    } else {
-      switch (error.status) {
-        case 400:
-          errorMessage = 'Невірні дані запиту';
-          break;
-        case 401:
-          errorMessage = 'Невірний email або пароль';
-          break;
-        case 409:
-          errorMessage = 'Користувач з таким email або іменем уже існує';
-          break;
-        case 422:
-          errorMessage = 'Неправильно заповнені поля';
-          break;
-        case 500:
-          errorMessage = 'Помилка сервера. Спробуйте пізніше';
-          break;
-        case 0:
-          errorMessage = 'Немає зв\'язку з сервером';
-          break;
-        default:
-          errorMessage = `Помилка ${error.status}: ${error.message || 'Невідома помилка'}`;
-      }
-    }
-
-    return throwError(() => ({ ...error, message: errorMessage }));
-  }
 }
