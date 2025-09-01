@@ -1,19 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatChipsModule } from '@angular/material/chips';
 import { AuthService } from '../../services/auth.service';
+import { RentalService } from '../../services/rental.service';
+import { RentalStatsResponse } from '../../models/rental.interface';
 
 @Component({
   selector: 'app-dashboard',
   imports: [
+    CommonModule,
     RouterModule,
     MatToolbarModule,
     MatButtonModule,
     MatCardModule,
-    MatIconModule
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatChipsModule
   ],
   template: `
     <mat-toolbar color="primary">
@@ -43,6 +51,52 @@ import { AuthService } from '../../services/auth.service';
               <p><strong>Email:</strong> {{ user.email }}</p>
               <p><strong>Роль:</strong> {{ getRoleTranslation(user.role) }}</p>
             </div>
+            
+            @if (canManageLibrary() && stats()) {
+              <div class="statistics-section">
+                <h3>Статистика бібліотеки:</h3>
+                @if (statsLoading()) {
+                  <div class="loading-stats">
+                    <mat-spinner diameter="40"></mat-spinner>
+                    <p>Завантаження статистики...</p>
+                  </div>
+                } @else {
+                  <div class="stats-grid">
+                    <div class="stat-card">
+                      <mat-icon color="primary">library_books</mat-icon>
+                      <div class="stat-info">
+                        <span class="stat-number">{{ stats()?.data?.totalRentals || 0 }}</span>
+                        <span class="stat-label">Всього орендів</span>
+                      </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                      <mat-icon color="accent">assignment</mat-icon>
+                      <div class="stat-info">
+                        <span class="stat-number">{{ stats()?.data?.activeRentals || 0 }}</span>
+                        <span class="stat-label">Активних орендів</span>
+                      </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                      <mat-icon color="warn">schedule</mat-icon>
+                      <div class="stat-info">
+                        <span class="stat-number">{{ stats()?.data?.overdueRentals || 0 }}</span>
+                        <span class="stat-label">Прострочених</span>
+                      </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                      <mat-icon style="color: green;">attach_money</mat-icon>
+                      <div class="stat-info">
+                        <span class="stat-number">{{ stats()?.data?.totalRevenue || 0 }} грн</span>
+                        <span class="stat-label">Загальний дохід</span>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
             
             <div class="quick-actions">
               <h3>Швидкі дії:</h3>
@@ -83,8 +137,20 @@ import { AuthService } from '../../services/auth.service';
   `,
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
-  constructor(public authService: AuthService) {}
+export class DashboardComponent implements OnInit {
+  stats = signal<RentalStatsResponse | null>(null);
+  statsLoading = signal<boolean>(false);
+
+  constructor(
+    public authService: AuthService,
+    private rentalService: RentalService
+  ) {}
+
+  ngOnInit(): void {
+    if (this.canManageLibrary()) {
+      this.loadStatistics();
+    }
+  }
 
   logout(): void {
     this.authService.logout();
@@ -102,5 +168,19 @@ export class DashboardComponent {
       'admin': 'Адміністратор'
     };
     return roleTranslations[role] || role;
+  }
+
+  private loadStatistics(): void {
+    this.statsLoading.set(true);
+    this.rentalService.getRentalStats().subscribe({
+      next: (response) => {
+        this.stats.set(response);
+        this.statsLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading statistics:', error);
+        this.statsLoading.set(false);
+      }
+    });
   }
 }

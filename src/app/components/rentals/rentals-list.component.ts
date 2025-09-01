@@ -1,7 +1,7 @@
-import { Component, OnInit, computed } from '@angular/core';
+import { Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -15,7 +15,9 @@ import { MatTabsModule } from '@angular/material/tabs';
 
 import { RentalService } from '../../services/rental.service';
 import { AuthService } from '../../services/auth.service';
+import { ReaderService } from '../../services/reader.service';
 import { Rental } from '../../models/rental.interface';
+import { Reader } from '../../models/reader.interface';
 
 @Component({
   selector: 'app-rentals-list',
@@ -37,12 +39,18 @@ import { Rental } from '../../models/rental.interface';
   template: `
     <div class="rentals-header">
       <div class="header-left">
-        <button mat-icon-button routerLink="/dashboard" class="back-button" aria-label="Повернутися до панелі керування">
+        <button mat-icon-button [routerLink]="getBackRoute()" class="back-button" aria-label="Повернутися назад">
           <mat-icon>arrow_back</mat-icon>
         </button>
-        <h1>Управління орендованими книгами</h1>
+        <h1>{{ getPageTitle() }}</h1>
+        @if (selectedReader()) {
+          <div class="reader-info">
+            <mat-icon>person</mat-icon>
+            <span>{{ selectedReader()!.lastName }} {{ selectedReader()!.firstName }}</span>
+          </div>
+        }
       </div>
-      @if (canManageRentals()) {
+      @if (canManageRentals() && !readerId()) {
         <button mat-raised-button color="primary" routerLink="/rentals/add">
           <mat-icon>add</mat-icon>
           Орендувати книгу
@@ -273,14 +281,25 @@ import { Rental } from '../../models/rental.interface';
 })
 
 export class RentalsListComponent implements OnInit {
+  readerId = signal<string | null>(null);
+  selectedReader = signal<Reader | null>(null);
+
   constructor(
+    private route: ActivatedRoute,
     public rentalService: RentalService,
     public authService: AuthService,
+    private readerService: ReaderService,
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    this.loadRentals();
+    const readerIdParam = this.route.snapshot.paramMap.get('readerId');
+    if (readerIdParam) {
+      this.readerId.set(readerIdParam);
+      this.loadReaderAndRentals(readerIdParam);
+    } else {
+      this.loadRentals();
+    }
   }
 
   filteredRentals = computed(() => {
@@ -337,8 +356,21 @@ export class RentalsListComponent implements OnInit {
     return Math.max(0, diffDays);
   }
 
+  getPageTitle(): string {
+    return this.readerId() ? 'Оренди читача' : 'Управління орендованими книгами';
+  }
+
+  getBackRoute(): string {
+    return this.readerId() ? '/readers' : '/dashboard';
+  }
+
   onTabChange(event: any): void {
     const index = event.index;
+    if (this.readerId()) {
+      // For reader-specific view, we don't switch tabs - just show all reader's rentals
+      return;
+    }
+    
     switch (index) {
       case 0:
         this.loadRentals();
@@ -376,6 +408,29 @@ export class RentalsListComponent implements OnInit {
     this.rentalService.getOverdueRentals().subscribe({
       error: (error) => {
         this.snackBar.open(error.message || 'Помилка завантаження прострочених орендів', 'Закрити', {
+          duration: 5000
+        });
+      }
+    });
+  }
+
+  private loadReaderAndRentals(readerId: string): void {
+    // Load reader info
+    this.readerService.getReaderById(readerId).subscribe({
+      next: (response) => {
+        this.selectedReader.set(response.data.reader);
+      },
+      error: (error) => {
+        this.snackBar.open(error.message || 'Помилка завантаження інформації про читача', 'Закрити', {
+          duration: 5000
+        });
+      }
+    });
+
+    // Load reader's rentals
+    this.rentalService.getReaderRentals(readerId).subscribe({
+      error: (error) => {
+        this.snackBar.open(error.message || 'Помилка завантаження орендів читача', 'Закрити', {
           duration: 5000
         });
       }

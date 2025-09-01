@@ -9,6 +9,7 @@ import { ReaderFormComponent } from './components/readers/reader-form.component'
 import { RentalsListComponent } from './components/rentals/rentals-list.component';
 import { RentalFormComponent } from './components/rentals/rental-form.component';
 import { ReturnBookComponent } from './components/rentals/return-book.component';
+import { RentalDetailComponent } from './components/rentals/rental-detail.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -31,7 +32,7 @@ export const routes: Routes = [
   { path: 'rentals/add', component: RentalFormComponent },
   { path: 'rentals/return/:id', component: ReturnBookComponent },
   { path: 'rentals/reader/:readerId', component: RentalsListComponent },
-  { path: 'rentals/:id', component: RentalsListComponent },
+  { path: 'rentals/:id', component: RentalDetailComponent },
   
   { path: '**', redirectTo: '/login' }
 ];
