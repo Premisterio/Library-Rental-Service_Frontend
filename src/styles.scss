@@ -7,6 +7,11 @@ $primary: mat.m2-define-palette(mat.$m2-indigo-palette);
 $accent: mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400);
 $warn: mat.m2-define-palette(mat.$m2-red-palette);
 
+// Typography config for font
+$typography: mat.m2-define-typography-config(
+  $font-family: '"Raleway", "Helvetica Neue", Arial, sans-serif'
+);
+
 // Theme definition
 $theme: mat.m2-define-light-theme((
   color: (
@@ -14,7 +19,7 @@ $theme: mat.m2-define-light-theme((
     accent: $accent,
     warn: $warn,
   ),
-  typography: mat.m2-define-typography-config(),
+  typography: $typography,
   density: 0,
 ));
 
@@ -24,9 +29,5 @@ $theme: mat.m2-define-light-theme((
 html, body {
   height: 100%;
   margin: 0;
-  font-family: Inter, Helvetica, sans-serif;
-}
-
-.login-container {
-  background-color: aquamarine;
+  font-family: "Raleway", "Helvetica Neue", Arial, sans-serif;
 }

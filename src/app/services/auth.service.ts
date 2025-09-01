@@ -1,0 +1,142 @@
+import { Injectable, signal } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { Observable, tap, catchError, throwError } from 'rxjs';
+import { environment } from '../../environments/environment';
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  username: string;
+  email: string;
+  password: string;
+  role?: string;
+}
+
+export interface AuthResponse {
+  success: boolean;
+  message: string;
+  data: {
+    token: string;
+    refreshToken: string;
+    user: User;
+  };
+}
+
+export interface User {
+  id: string;
+  username: string;
+  email: string;
+  role: string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+  private readonly apiUrl = environment.apiUrl;
+  
+  currentUser = signal<User | null>(null);
+  isAuthenticated = signal<boolean>(false);
+
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {
+    this.loadUserFromStorage();
+  }
+
+  login(credentials: LoginRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, credentials)
+      .pipe(
+        tap(response => this.handleAuthSuccess(response)),
+        catchError(this.handleError)
+      );
+  }
+
+  register(userData: RegisterRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, userData)
+      .pipe(
+        tap(response => this.handleAuthSuccess(response)),
+        catchError(this.handleError)
+      );
+  }
+
+  logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('user');
+    this.currentUser.set(null);
+    this.isAuthenticated.set(false);
+    this.router.navigate(['/login']);
+  }
+
+  private handleAuthSuccess(response: AuthResponse): void {
+    if (!response.data || !response.data.user) {
+      console.error('No user data in response!');
+      return;
+    }
+    
+    localStorage.setItem('token', response.data.token);
+    localStorage.setItem('refreshToken', response.data.refreshToken);
+    localStorage.setItem('user', JSON.stringify(response.data.user));
+    this.currentUser.set(response.data.user);
+    this.isAuthenticated.set(true);
+  }
+
+  private loadUserFromStorage(): void {
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+    
+    if (token && user && user !== 'undefined' && user !== 'null') {
+      try {
+        this.currentUser.set(JSON.parse(user));
+        this.isAuthenticated.set(true);
+      } catch (error) {
+        console.error('Error parsing user data from localStorage:', error);
+        this.logout();
+      }
+    }
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  // Logging errors onto the UI in Ukrainian
+  private handleError = (error: HttpErrorResponse): Observable<never> => {
+    let errorMessage = 'Сталася невідома помилка';
+    
+    if (error.error && error.error.message) {
+      errorMessage = error.error.message;
+    } else {
+      switch (error.status) {
+        case 400:
+          errorMessage = 'Невірні дані запиту';
+          break;
+        case 401:
+          errorMessage = 'Невірний email або пароль';
+          break;
+        case 409:
+          errorMessage = 'Користувач з таким email або іменем уже існує';
+          break;
+        case 422:
+          errorMessage = 'Неправильно заповнені поля';
+          break;
+        case 500:
+          errorMessage = 'Помилка сервера. Спробуйте пізніше';
+          break;
+        case 0:
+          errorMessage = 'Немає зв\'язку з сервером';
+          break;
+        default:
+          errorMessage = `Помилка ${error.status}: ${error.message || 'Невідома помилка'}`;
+      }
+    }
+
+    return throwError(() => ({ ...error, message: errorMessage }));
+  }
+}
