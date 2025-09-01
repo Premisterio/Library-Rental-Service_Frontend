@@ -29,18 +29,11 @@ import { AuthService } from '../../services/auth.service';
       </button>
     </mat-toolbar>
 
-    <div class="navigation">
-      <button mat-raised-button routerLink="/books" color="primary" class="icon-only-button">
-        <mat-icon>list</mat-icon>
-          Каталог книг
-      </button>
-    </div>
-
     <div class="dashboard-content">
       <mat-card>
         <mat-card-header>
-          <mat-card-title>Панель керування</mat-card-title>
-          <mat-card-subtitle>Швидкі дії</mat-card-subtitle>
+          <mat-card-title class="title">Панель керування</mat-card-title>
+          <mat-card-subtitle class="subtitle">Ваші дані:</mat-card-subtitle>
         </mat-card-header>
         
         <mat-card-content>
@@ -54,15 +47,32 @@ import { AuthService } from '../../services/auth.service';
             <div class="quick-actions">
               <h3>Швидкі дії:</h3>
               <div class="action-buttons">
-                <button mat-raised-button routerLink="/books" color="primary">
+                <button mat-raised-button routerLink="/books" color="primary" class="action-button">
                   <mat-icon>library_books</mat-icon>
                   Переглянути книги
                 </button>
-                @if (['admin', 'librarian'].includes(user.role)) {
-                  <button mat-raised-button routerLink="/books/add" color="accent">
+                
+                @if (canManageLibrary()) {
+                  <button mat-raised-button routerLink="/books/add" class="action-button mat-green-accent">
                     <mat-icon>add</mat-icon>
                     Додати книгу
                   </button>
+                  
+                  <button mat-raised-button routerLink="/rentals" color="primary" class="action-button">
+                    <mat-icon>assignment</mat-icon>
+                    Переглянути оренди
+                  </button>
+                  
+                  <button mat-raised-button routerLink="/rentals/add" class="action-button mat-green-accent">
+                    <mat-icon>add_circle</mat-icon>
+                    Нова оренда
+                  </button>
+
+                  <button mat-raised-button routerLink="/readers" color="accent" class="action-button">
+                    <mat-icon>people</mat-icon>
+                    Управління читачами
+                  </button>
+                  
                 }
               </div>
             </div>
@@ -78,6 +88,11 @@ export class DashboardComponent {
 
   logout(): void {
     this.authService.logout();
+  }
+
+  canManageLibrary(): boolean {
+    const user = this.authService.currentUser();
+    return user ? ['admin', 'librarian'].includes(user.role) : false;
   }
 
   getRoleTranslation(role: string): string {
