@@ -1,0 +1,137 @@
+.readers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 1rem 2rem 1rem;
+  padding: 0 1rem;
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    
+    .back-button {
+      color: #666;
+
+      &:hover {
+        color: hsl(4, 60%, 58%);
+      }
+    }
+    
+    h1 {
+      margin: 0;
+      color: #333;
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+  }
+}
+
+.search-filters {
+  display: flex;
+  gap: 1.5rem;
+  margin: 1rem 2rem;
+  
+  
+  .search-field {
+    min-width: 20rem;
+    flex: 1;
+  }
+  
+  .filter-field {
+    min-width: 30rem;
+  }
+}
+
+.readers-content {
+  padding: 0 2rem;
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4rem;
+    
+    p {
+      margin-top: 1rem;
+      color: #666;
+    }
+  }
+  
+  .no-readers {
+    text-align: center;
+    padding: 3rem;
+    color: #666;
+    
+    mat-icon {
+      font-size: 4rem;
+      width: 4rem;
+      height: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+    
+    h3 {
+      margin: 1rem 0 0.5rem 0;
+      font-weight: 500;
+    }
+    
+    p {
+      margin: 0;
+      font-size: 0.875rem;
+    }
+  }
+  
+  .readers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(21.875rem, 1fr));
+    gap: 1rem;
+    
+    .reader-card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      
+      &:hover {
+        transform: translateY(-0.125rem);
+        box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
+      }
+      
+      .reader-info {
+        .reader-details {
+          margin-top: 0.75rem;
+          
+          p {
+            margin: 0.5rem 0;
+            font-size: 0.875rem;
+            line-height: 1.4;
+            
+            strong {
+              font-weight: 500;
+              color: #333;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .readers-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .search-filters {
+    flex-direction: column;
+    
+    .search-field,
+    .filter-field {
+      width: 100%;
+      min-width: unset;
+    }
+  }
+  
+  .readers-content .readers-grid {
+    grid-template-columns: 1fr;
+  }
+}
