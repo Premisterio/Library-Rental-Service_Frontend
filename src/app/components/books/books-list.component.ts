@@ -40,12 +40,10 @@ import { Book } from '../../models/book.interface';
         </button>
         <h1>Каталог книг</h1>
       </div>
-      @if (canManageBooks()) {
-        <button mat-raised-button color="primary" routerLink="/books/add">
-          <mat-icon>add</mat-icon>
-          Додати книгу
-        </button>
-      }
+      <button mat-raised-button color="primary" routerLink="/books/add">
+        <mat-icon>add</mat-icon>
+        Додати книгу
+      </button>
     </div>
 
     <div class="search-filters">
@@ -117,21 +115,14 @@ import { Book } from '../../models/book.interface';
               </mat-card-content>
               
               <mat-card-actions align="start">
-                @if (canManageBooks()) {
-                  <button mat-button [routerLink]="['/books/edit', book._id]">
-                    <mat-icon>edit</mat-icon>
-                    Редагувати
-                  </button>
-                  <button mat-button color="warn" (click)="deleteBook(book)">
-                    <mat-icon>delete</mat-icon>
-                    Видалити
-                  </button>
-                } @else {
-                  <button mat-button [disabled]="book.availableCopies === 0">
-                    <mat-icon>book_online</mat-icon>
-                    Орендувати
-                  </button>
-                }
+                <button mat-button [routerLink]="['/books/edit', book._id]">
+                  <mat-icon>edit</mat-icon>
+                  Редагувати
+                </button>
+                <button mat-button color="warn" (click)="deleteBook(book)">
+                  <mat-icon>delete</mat-icon>
+                  Видалити
+                </button>
               </mat-card-actions>
             </mat-card>
           }
@@ -189,10 +180,6 @@ export class BooksListComponent implements OnInit {
     return books;
   });
 
-  canManageBooks(): boolean {
-    const user = this.authService.currentUser();
-    return user ? ['admin', 'librarian'].includes(user.role) : false;
-  }
 
   private loadBooks(): void {
     this.bookService.getAllBooks().subscribe({

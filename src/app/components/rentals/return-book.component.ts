@@ -216,11 +216,6 @@ export class ReturnBookComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this.canManageRentals()) {
-      this.router.navigate(['/rentals']);
-      return;
-    }
-
     this.rentalId = this.route.snapshot.params['id'];
     if (this.rentalId) {
       this.loadRental(this.rentalId);
@@ -322,10 +317,6 @@ export class ReturnBookComponent implements OnInit {
     return new Date(dateString).toLocaleDateString('uk-UA');
   }
 
-  canManageRentals(): boolean {
-    const user = this.authService.currentUser();
-    return user ? ['admin', 'librarian'].includes(user.role) : false;
-  }
 
   onSubmit(): void {
     if (this.returnForm.invalid || !this.rental) {

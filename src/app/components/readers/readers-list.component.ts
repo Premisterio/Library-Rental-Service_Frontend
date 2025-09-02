@@ -40,12 +40,10 @@ import { Reader } from '../../models/reader.interface';
         </button>
         <h1>Читачі</h1>
       </div>
-      @if (canManageReaders()) {
-        <button mat-raised-button color="primary" routerLink="/readers/add">
-          <mat-icon>add</mat-icon>
-          Додати читача
-        </button>
-      }
+      <button mat-raised-button color="primary" routerLink="/readers/add">
+        <mat-icon>add</mat-icon>
+        Додати читача
+      </button>
     </div>
 
     <div class="search-filters">
@@ -109,20 +107,18 @@ import { Reader } from '../../models/reader.interface';
               </mat-card-content>
               
               <mat-card-actions align="start">
-                @if (canManageReaders()) {
-                  <button mat-button [routerLink]="['/readers/edit', reader._id]">
-                    <mat-icon>edit</mat-icon>
-                    Редагувати
-                  </button>
-                  <button mat-button [routerLink]="['/rentals/reader', reader._id]">
-                    <mat-icon>library_books</mat-icon>
-                    Оренди
-                  </button>
-                  <button mat-button color="warn" (click)="deleteReader(reader)">
-                    <mat-icon>delete</mat-icon>
-                    Видалити
-                  </button>
-                }
+                <button mat-button [routerLink]="['/readers/edit', reader._id]">
+                  <mat-icon>edit</mat-icon>
+                  Редагувати
+                </button>
+                <button mat-button [routerLink]="['/rentals/reader', reader._id]">
+                  <mat-icon>library_books</mat-icon>
+                  Оренди
+                </button>
+                <button mat-button color="warn" (click)="deleteReader(reader)">
+                  <mat-icon>delete</mat-icon>
+                  Видалити
+                </button>
               </mat-card-actions>
             </mat-card>
           }
@@ -169,10 +165,6 @@ export class ReadersListComponent implements OnInit {
     return readers;
   });
 
-  canManageReaders(): boolean {
-    const user = this.authService.currentUser();
-    return user ? ['admin', 'librarian'].includes(user.role) : false;
-  }
 
   getCategoryLabel(category: string): string {
     const labels = {

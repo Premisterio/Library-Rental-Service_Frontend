@@ -174,12 +174,6 @@ export class BookFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Check if user has permission to manage books
-    if (!this.canManageBooks()) {
-      this.router.navigate(['/books']);
-      return;
-    }
-
     this.bookId = this.route.snapshot.params['id'];
     this.isEditMode = !!this.bookId;
 
@@ -237,10 +231,6 @@ export class BookFormComponent implements OnInit {
     });
   }
 
-  canManageBooks(): boolean {
-    const user = this.authService.currentUser();
-    return user ? ['admin', 'librarian'].includes(user.role) : false;
-  }
 
   onSubmit(): void {
     if (this.bookForm.invalid) {

@@ -205,11 +205,6 @@ export class RentalFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this.canManageRentals()) {
-      this.router.navigate(['/rentals']);
-      return;
-    }
-
     this.loadData();
     this.setupAutocomplete();
   }
@@ -348,10 +343,6 @@ export class RentalFormComponent implements OnInit {
     this.estimatedCost = baseCost - this.discount;
   }
 
-  canManageRentals(): boolean {
-    const user = this.authService.currentUser();
-    return user ? ['admin', 'librarian'].includes(user.role) : false;
-  }
 
   onSubmit(): void {
     if (this.rentalForm.invalid) {

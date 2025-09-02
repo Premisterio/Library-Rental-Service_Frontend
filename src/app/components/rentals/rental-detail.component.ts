@@ -175,7 +175,7 @@ import { Rental } from '../../models/rental.interface';
           </mat-card-content>
           
           <mat-card-actions align="start">
-            @if (canManageRentals() && rental()!.status === 'active') {
+            @if (rental()!.status === 'active') {
               <button mat-raised-button color="accent" [routerLink]="['/rentals/return', rental()!._id]">
                 <mat-icon>keyboard_return</mat-icon>
                 Повернути книгу
@@ -222,10 +222,6 @@ export class RentalDetailComponent implements OnInit {
     }
   }
 
-  canManageRentals(): boolean {
-    const user = this.authService.currentUser();
-    return user ? ['admin', 'librarian'].includes(user.role) : false;
-  }
 
   getStatusLabel(status: string): string {
     const labels = {

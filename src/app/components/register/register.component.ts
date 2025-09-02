@@ -5,7 +5,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
 
@@ -17,7 +16,6 @@ import { AuthService } from '../../services/auth.service';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatSelectModule,
     MatSnackBarModule,
     RouterLink
   ],
@@ -69,15 +67,6 @@ import { AuthService } from '../../services/auth.service';
               }
             </mat-form-field>
 
-            <mat-form-field class="full-width">
-              <mat-label>Роль</mat-label>
-              <mat-select formControlName="role">
-                <mat-option value="reader">Читач</mat-option>
-                <mat-option value="librarian">Бібліотекар</mat-option>
-                <mat-option value="admin">Адміністратор</mat-option>
-              </mat-select>
-            </mat-form-field>
-
             <mat-card-actions>
               <button 
                 mat-raised-button 
@@ -116,8 +105,7 @@ export class RegisterComponent {
     this.registerForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      role: ['reader', Validators.required]
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 

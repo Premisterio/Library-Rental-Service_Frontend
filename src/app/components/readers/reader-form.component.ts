@@ -168,11 +168,6 @@ export class ReaderFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this.canManageReaders()) {
-      this.router.navigate(['/readers']);
-      return;
-    }
-
     this.readerId = this.route.snapshot.params['id'];
     this.isEditMode = !!this.readerId;
 
@@ -210,10 +205,6 @@ export class ReaderFormComponent implements OnInit {
     });
   }
 
-  canManageReaders(): boolean {
-    const user = this.authService.currentUser();
-    return user ? ['admin', 'librarian'].includes(user.role) : false;
-  }
 
   onSubmit(): void {
     if (this.readerForm.invalid) {

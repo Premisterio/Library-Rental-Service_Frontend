@@ -49,10 +49,10 @@ import { RentalStatsResponse } from '../../models/rental.interface';
             <div class="user-info">
               <p><strong>Користувач:</strong> {{ user.username }}</p>
               <p><strong>Email:</strong> {{ user.email }}</p>
-              <p><strong>Роль:</strong> {{ getRoleTranslation(user.role) }}</p>
+              <p><strong>Роль:</strong> Бібліотекар</p>
             </div>
             
-            @if (canManageLibrary() && stats()) {
+            @if (stats()) {
               <div class="statistics-section">
                 <h3>Статистика бібліотеки:</h3>
                 @if (statsLoading()) {
@@ -64,21 +64,21 @@ import { RentalStatsResponse } from '../../models/rental.interface';
                   <div class="stats-grid">
                     <div class="stat-card">
                       <div class="stat-info">
-                        <p class="stat-label">Всього орендовано книг:</p>
+                        <p class="stat-label">Всього книг в оренді:</p>
                         <p class="stat-number">{{ stats()?.data?.totalRentals || 0 }}</p>
                       </div>
                     </div>
                     
                     <div class="stat-card">
                       <div class="stat-info">
-                        <p class="stat-label">Кількість активно орендованих книг:</p>
+                        <p class="stat-label">Активно орендовані книги:</p>
                         <p class="stat-number">{{ stats()?.data?.activeRentals || 0 }}</p>
                       </div>
                     </div>
                     
                     <div class="stat-card">
                       <div class="stat-info">
-                        <p class="stat-label">Кількість прострочених книг:</p>
+                        <p class="stat-label">Прострочені книги:</p>
                         <p class="stat-number">{{ stats()?.data?.overdueRentals || 0 }}</p>
                       </div>
                     </div>
@@ -96,35 +96,31 @@ import { RentalStatsResponse } from '../../models/rental.interface';
             }
             
             <div class="quick-actions">
-              <h3>Швидкі дії:</h3>
               <div class="action-buttons">
                 <button mat-raised-button routerLink="/books" color="primary" class="action-button">
                   <mat-icon>library_books</mat-icon>
                   Переглянути каталог книг
                 </button>
                 
-                @if (canManageLibrary()) {
-                  <button mat-raised-button routerLink="/books/add" class="action-button mat-green-accent">
-                    <mat-icon>add</mat-icon>
-                    Додати книгу
-                  </button>
-                  
-                  <button mat-raised-button routerLink="/rentals" color="primary" class="action-button">
-                    <mat-icon>assignment</mat-icon>
-                    Переглянути орендовані книги
-                  </button>
-                  
-                  <button mat-raised-button routerLink="/rentals/add" class="action-button mat-green-accent">
-                    <mat-icon>add_circle</mat-icon>
-                    Орендувати книгу
-                  </button>
+                <button mat-raised-button routerLink="/books/add" class="action-button mat-green-accent">
+                  <mat-icon>add</mat-icon>
+                  Додати книгу
+                </button>
+                
+                <button mat-raised-button routerLink="/rentals" color="primary" class="action-button">
+                  <mat-icon>assignment</mat-icon>
+                  Переглянути орендовані книги
+                </button>
+                
+                <button mat-raised-button routerLink="/rentals/add" class="action-button mat-green-accent">
+                  <mat-icon>add_circle</mat-icon>
+                  Орендувати книгу
+                </button>
 
-                  <button mat-raised-button routerLink="/readers" color="accent" class="action-button">
-                    <mat-icon>people</mat-icon>
-                    Управління читачами
-                  </button>
-                  
-                }
+                <button mat-raised-button routerLink="/readers" color="accent" class="action-button">
+                  <mat-icon>people</mat-icon>
+                  Управління читачами
+                </button>
               </div>
             </div>
           }
@@ -144,28 +140,13 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.canManageLibrary()) {
-      this.loadStatistics();
-    }
+    this.loadStatistics();
   }
 
   logout(): void {
     this.authService.logout();
   }
 
-  canManageLibrary(): boolean {
-    const user = this.authService.currentUser();
-    return user ? ['admin', 'librarian'].includes(user.role) : false;
-  }
-
-  getRoleTranslation(role: string): string {
-    const roleTranslations: { [key: string]: string } = {
-      'reader': 'Читач',
-      'librarian': 'Бібліотекар',
-      'admin': 'Адміністратор'
-    };
-    return roleTranslations[role] || role;
-  }
 
   private loadStatistics(): void {
     this.statsLoading.set(true);

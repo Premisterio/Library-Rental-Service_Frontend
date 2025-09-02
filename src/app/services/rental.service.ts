@@ -93,10 +93,18 @@ export class RentalService {
   }
 
   getReaderRentals(readerId: string): Observable<RentalsResponse> {
+    this.loading.set(true);
     return this.http.get<RentalsResponse>(`${this.apiUrl}/reader/${readerId}`, {
       headers: this.getHeaders()
     }).pipe(
-      catchError(this.errorHandler.handleError('rentals'))
+      tap(response => {
+        this.rentals.set(response.data.rentals);
+        this.loading.set(false);
+      }),
+      catchError(error => {
+        this.loading.set(false);
+        return this.errorHandler.handleError('rentals')(error);
+      })
     );
   }
 

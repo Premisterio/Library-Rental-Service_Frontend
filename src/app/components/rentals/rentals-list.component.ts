@@ -50,7 +50,7 @@ import { Reader } from '../../models/reader.interface';
           </div>
         }
       </div>
-      @if (canManageRentals() && !readerId()) {
+      @if (!readerId()) {
         <button mat-raised-button color="primary" routerLink="/rentals/add">
           <mat-icon>add</mat-icon>
           Орендувати книгу
@@ -124,18 +124,16 @@ import { Reader } from '../../models/reader.interface';
                     </mat-card-content>
                     
                     <mat-card-actions align="start">
-                      @if (canManageRentals()) {
-                        @if (rental.status === 'active') {
-                          <button mat-raised-button color="accent" [routerLink]="['/rentals/return', rental._id]">
-                            <mat-icon>keyboard_return</mat-icon>
-                            Повернути
-                          </button>
-                        }
-                        <button mat-button [routerLink]="['/rentals', rental._id]">
-                          <mat-icon>visibility</mat-icon>
-                          Деталі
+                      @if (rental.status === 'active') {
+                        <button mat-raised-button color="accent" [routerLink]="['/rentals/return', rental._id]">
+                          <mat-icon>keyboard_return</mat-icon>
+                          Повернути
                         </button>
                       }
+                      <button mat-button [routerLink]="['/rentals', rental._id]">
+                        <mat-icon>visibility</mat-icon>
+                        Деталі
+                      </button>
                     </mat-card-actions>
                   </mat-card>
                 }
@@ -192,18 +190,16 @@ import { Reader } from '../../models/reader.interface';
                     </mat-card-content>
                     
                     <mat-card-actions align="start">
-                      @if (canManageRentals()) {
-                        @if (rental.status === 'active') {
-                          <button mat-raised-button color="accent" [routerLink]="['/rentals/return', rental._id]">
-                            <mat-icon>keyboard_return</mat-icon>
-                            Повернути
-                          </button>
-                        }
-                        <button mat-button [routerLink]="['/rentals', rental._id]">
-                          <mat-icon>visibility</mat-icon>
-                          Деталі
+                      @if (rental.status === 'active') {
+                        <button mat-raised-button color="accent" [routerLink]="['/rentals/return', rental._id]">
+                          <mat-icon>keyboard_return</mat-icon>
+                          Повернути
                         </button>
                       }
+                      <button mat-button [routerLink]="['/rentals', rental._id]">
+                        <mat-icon>visibility</mat-icon>
+                        Деталі
+                      </button>
                     </mat-card-actions>
                   </mat-card>
                 }
@@ -257,16 +253,14 @@ import { Reader } from '../../models/reader.interface';
                     </mat-card-content>
                     
                     <mat-card-actions align="start">
-                      @if (canManageRentals()) {
-                        <button mat-raised-button color="warn" [routerLink]="['/rentals/return', rental._id]">
-                          <mat-icon>keyboard_return</mat-icon>
-                          Терміново повернути
-                        </button>
-                        <button mat-button [routerLink]="['/rentals', rental._id]">
-                          <mat-icon>visibility</mat-icon>
-                          Деталі
-                        </button>
-                      }
+                      <button mat-raised-button color="warn" [routerLink]="['/rentals/return', rental._id]">
+                        <mat-icon>keyboard_return</mat-icon>
+                        Терміново повернути
+                      </button>
+                      <button mat-button [routerLink]="['/rentals', rental._id]">
+                        <mat-icon>visibility</mat-icon>
+                        Деталі
+                      </button>
                     </mat-card-actions>
                   </mat-card>
                 }
@@ -306,10 +300,6 @@ export class RentalsListComponent implements OnInit {
     return this.rentalService.rentals();
   });
 
-  canManageRentals(): boolean {
-    const user = this.authService.currentUser();
-    return user ? ['admin', 'librarian'].includes(user.role) : false;
-  }
 
   getStatusLabel(status: string): string {
     const labels = {
