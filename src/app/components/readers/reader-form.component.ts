@@ -31,7 +31,7 @@ import { CreateReaderRequest, UpdateReaderRequest } from '../../models/reader.in
   ],
   template: `
     <mat-toolbar>
-      <button mat-icon-button (click)="goBack()" aria-label="Повернутися до списку читачів">
+      <button mat-icon-button class="back-button" (click)="goBack()" aria-label="Повернутися до списку читачів">
         <mat-icon>arrow_back</mat-icon>
       </button>
       <span>{{ isEditMode ? 'Редагування читача' : 'Додавання нового читача' }}</span>
@@ -262,6 +262,6 @@ export class ReaderFormComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/readers']);
+    window.history.back();
   }
 }

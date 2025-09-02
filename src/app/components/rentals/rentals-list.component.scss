@@ -26,6 +26,8 @@
   }
 }
 
+
+
 .rental-tabs {
   padding: 0 2rem;
 
@@ -70,6 +72,7 @@
   }
   
   .rentals-grid {
+    
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
     gap: 1rem;
@@ -108,8 +111,8 @@
             line-height: 1.4;
             
             strong {
-              font-weight: 500;
-              color: #333;
+              font-weight: 600;
+              color: #1e4dba;
             }
             
             &.fine {

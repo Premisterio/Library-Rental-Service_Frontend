@@ -235,7 +235,7 @@ import { Reader } from '../../models/reader.interface';
                     <mat-card-content>
                       <div class="rental-info">
                         <div class="reader-info">
-                          <p><strong>Читач:</strong> {{ rental.reader.lastName }} {{ rental.reader.firstName }}</p>
+                          <p><strong>Читач:</strong> {{  rental.issueDate }} {{ rental.reader.firstName }}</p>
                           <p><strong>Категорія:</strong> {{ getCategoryLabel(rental.reader.category) }}</p>
                           <p><strong>Телефон:</strong> {{ rental.reader.phone }}</p>
                         </div>
@@ -262,7 +262,7 @@ import { Reader } from '../../models/reader.interface';
                         Деталі
                       </button>
                     </mat-card-actions>
-                  </mat-card>
+                  </mat-card> 
                 }
               </div>
             }
@@ -357,7 +357,6 @@ export class RentalsListComponent implements OnInit {
   onTabChange(event: any): void {
     const index = event.index;
     if (this.readerId()) {
-      // For reader-specific view, we don't switch tabs - just show all reader's rentals
       return;
     }
     

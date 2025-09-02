@@ -49,7 +49,6 @@ import { RentalStatsResponse } from '../../models/rental.interface';
             <div class="user-info">
               <p><strong>Користувач:</strong> {{ user.username }}</p>
               <p><strong>Email:</strong> {{ user.email }}</p>
-              <p><strong>Роль:</strong> Бібліотекар</p>
             </div>
             
             @if (stats()) {
@@ -87,7 +86,6 @@ import { RentalStatsResponse } from '../../models/rental.interface';
                       <div class="stat-info">
                         <p class="stat-label">Загальний дохід:</p>
                         <p class="stat-number">{{ stats()?.data?.totalRevenue || 0 }} грн</p>
-                        
                       </div>
                     </div>
                   </div>
@@ -96,31 +94,52 @@ import { RentalStatsResponse } from '../../models/rental.interface';
             }
             
             <div class="quick-actions">
-              <div class="action-buttons">
-                <button mat-raised-button routerLink="/books" color="primary" class="action-button">
-                  <mat-icon>library_books</mat-icon>
-                  Переглянути каталог книг
-                </button>
-                
-                <button mat-raised-button routerLink="/books/add" class="action-button mat-green-accent">
-                  <mat-icon>add</mat-icon>
-                  Додати книгу
-                </button>
-                
-                <button mat-raised-button routerLink="/rentals" color="primary" class="action-button">
-                  <mat-icon>assignment</mat-icon>
-                  Переглянути орендовані книги
-                </button>
-                
-                <button mat-raised-button routerLink="/rentals/add" class="action-button mat-green-accent">
-                  <mat-icon>add_circle</mat-icon>
-                  Орендувати книгу
-                </button>
 
-                <button mat-raised-button routerLink="/readers" color="accent" class="action-button">
-                  <mat-icon>people</mat-icon>
-                  Управління читачами
-                </button>
+              <div class="action-section">
+                <h3 class="section-title">
+                  <mat-icon>dashboard</mat-icon>
+                  Перегляд та управління
+                </h3>
+                <div class="action-buttons management-buttons">
+                  <button mat-raised-button routerLink="/books" color="primary" class="action-button">
+                    <mat-icon>library_books</mat-icon>
+                    Переглянути каталог книг
+                  </button>
+                  
+                  <button mat-raised-button routerLink="/rentals" color="primary" class="action-button">
+                    <mat-icon>book_4</mat-icon>
+                    Переглянути орендовані книги
+                  </button>
+
+                  <button mat-raised-button routerLink="/readers" color="primary" class="action-button">
+                    <mat-icon>people</mat-icon>
+                    Управління читачами
+                  </button>
+                </div>
+              </div>
+
+              <!-- ADD NEW SECTION -->
+              <div class="action-section">
+                <h3 class="section-title">
+                  <mat-icon>add_circle</mat-icon>
+                  Додавання нового
+                </h3>
+                <div class="action-buttons add-buttons">
+                  <button mat-raised-button routerLink="/books/add" class="action-button mat-green-accent">
+                    <mat-icon>add</mat-icon>
+                    Додати книгу
+                  </button>
+                  
+                  <button mat-raised-button routerLink="/rentals/add" class="action-button mat-green-accent">
+                    <mat-icon>add</mat-icon>
+                    Орендувати книгу
+                  </button>
+
+                  <button mat-raised-button routerLink="/readers/add" class="action-button mat-green-accent">
+                    <mat-icon>add</mat-icon>
+                    Додати читача
+                  </button>
+                </div>
               </div>
             </div>
           }
@@ -146,7 +165,6 @@ export class DashboardComponent implements OnInit {
   logout(): void {
     this.authService.logout();
   }
-
 
   private loadStatistics(): void {
     this.statsLoading.set(true);

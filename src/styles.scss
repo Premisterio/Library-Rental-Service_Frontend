@@ -47,6 +47,12 @@ html, body {
   height: 100%;
   margin: 0;
   font-family: "Raleway", "Helvetica Neue", Arial, sans-serif;
+  :focus-visible {
+  outline: 3px solid red; 
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 }
 
 // Global background

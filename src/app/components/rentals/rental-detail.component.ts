@@ -119,7 +119,7 @@ import { Rental } from '../../models/rental.interface';
                     </div>
                   }
                   <div class="info-item">
-                    <label>Статус:</label>
+                    <label >Статус:</label>
                     <mat-chip [color]="getStatusColor(rental()!.status)">
                       {{ getStatusLabel(rental()!.status) }}
                     </mat-chip>
@@ -181,10 +181,6 @@ import { Rental } from '../../models/rental.interface';
                 Повернути книгу
               </button>
             }
-            <button mat-button routerLink="/rentals">
-              <mat-icon>arrow_back</mat-icon>
-              Повернутися до списку
-            </button>
           </mat-card-actions>
         </mat-card>
       } @else {
