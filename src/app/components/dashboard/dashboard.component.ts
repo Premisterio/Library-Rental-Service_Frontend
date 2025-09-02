@@ -53,7 +53,10 @@ import { RentalStatsResponse } from '../../models/rental.interface';
             
             @if (stats()) {
               <div class="statistics-section">
-                <h3>Статистика бібліотеки:</h3>
+                <h3>
+  <mat-icon>bar_chart</mat-icon>
+  Статистика бібліотеки:
+</h3>
                 @if (statsLoading()) {
                   <div class="loading-stats">
                     <mat-spinner diameter="40"></mat-spinner>
