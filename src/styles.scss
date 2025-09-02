@@ -50,11 +50,12 @@ html, body {
 }
 
 // Global background
+// Background name -> Polka
+// scr: https://www.magicpattern.design/tools/css-backgrounds
 body {
   background-color: #e5e5f7;
-  background-image: radial-gradient(#444cf7 0.03125rem, #e5e5f7 0.03125rem);
-  background-size: 0.625rem 0.625rem;
-  background-attachment: fixed;
+  background-image: radial-gradient(#444cf7 0.08125rem, #e5e5f7 0.08125rem);
+  background-size: 1.625rem 1.625rem;
 }
 
 // White background for search inputs and form fields
