@@ -346,6 +346,6 @@ export class ReturnBookComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/rentals']);
+    window.history.back();
   }
 }

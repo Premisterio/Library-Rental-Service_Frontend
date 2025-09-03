@@ -54,9 +54,8 @@ import { RentalStatsResponse } from '../../models/rental.interface';
             @if (stats()) {
               <div class="statistics-section">
                 <h3>
-  <mat-icon>bar_chart</mat-icon>
-  Статистика бібліотеки:
-</h3>
+                  Статистика бібліотеки:
+                </h3>
                 @if (statsLoading()) {
                   <div class="loading-stats">
                     <mat-spinner diameter="40"></mat-spinner>
@@ -121,12 +120,13 @@ import { RentalStatsResponse } from '../../models/rental.interface';
                 </div>
               </div>
 
-              <!-- ADD NEW SECTION -->
               <div class="action-section">
                 <h3 class="section-title">
-                  <mat-icon>add_circle</mat-icon>
-                  Додавання нового
+                  <!-- Cringe but works -->
+                  <mat-icon style="color:#4caf50;">add_circle</mat-icon>
+                    Додавання нового 
                 </h3>
+
                 <div class="action-buttons add-buttons">
                   <button mat-raised-button routerLink="/books/add" class="action-button mat-green-accent">
                     <mat-icon>add</mat-icon>
