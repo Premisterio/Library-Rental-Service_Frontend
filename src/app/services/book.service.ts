@@ -45,9 +45,10 @@ export class BookService {
       if (params.genre) httpParams = httpParams.set('genre', params.genre);
       if (params.author) httpParams = httpParams.set('author', params.author);
       if (params.available !== undefined) httpParams = httpParams.set('available', params.available.toString());
-      if (params.page) httpParams = httpParams.set('page', params.page.toString());
-      if (params.limit) httpParams = httpParams.set('limit', params.limit.toString());
     }
+    
+    // Remove pagination limit, pagination is not implemented
+    httpParams = httpParams.set('limit', '200');
 
     this.loading.set(true);
     return this.http.get<BooksResponse>(this.apiUrl, { 
